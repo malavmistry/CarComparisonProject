@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  carcomparisonproject:
+    image: ${DOCKER_REGISTRY-}carcomparisonproject
+    build:
+      context: .
+      dockerfile: Dockerfile
