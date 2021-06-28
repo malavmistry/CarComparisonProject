@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Car Comparison";
+}
+
+@model List<CarComparisonProject.Models.CarModel>
+
+<div>
+    <h1 class="display-4">Car Comparison</h1>
+    </br></br></br>
+    <h3>Problem Statement</h3>
+    <p>
+        Create a tool based on this sample data that will give the following:</br>
+        <ol>
+            <li> A function to calculate the newest vehicles in order</li>
+            <li> A function to calculate an alphabetized List of vehicles</li>
+            <li> A function to calculate an ordered List of Vehicles by Price</li>
+            <li> A function to calculate the best value</li>
+            <li> A function to calculate fuel consumption for a given distance</li>
+            <li> A function to return a random car from the list</li>
+            <li> A function to return average MPG by year</li>
+        </ol>
+    </p>
+    <div class="carSort">
+        <div class="selectField" style="display: -webkit-box;">
+            <label> Please select an option:</label>
+            <select id="OptionList" style="margin-left: 10px" onchange="ToggleDistance()">
+                <option value="0">--Select--</option>
+                <option value="1">Newest Vehicles</option>
+                <option value="2">Alphabetized List</option>
+                <option value="3">Orderby Price</option>
+                <option value="4">Best Value</option>
+                <option value="5">Fuel Consumption</option>
+                <option value="6">Random Car</option>
+                <option value="7">Avg MPG/Year</option>
+            </select>
+            <div id="DistanceField" style="display:none; margin-left: 1rem;">
+                <label> Distance:</label> <input type="number" min="1" max="999" id="Distance" style="width:50px"/>
+            </div>
+        </div>
+        <input type="button" class="btn-primary" value="GO" id="GetResult" onclick="GetResult()" />
+        <div id="PopulateResult" style="margin: 20px">
+            @Html.Partial("_CarTable", Model)
+        </div>
+    </div>
+</div>
+
+<script>
+    function ToggleDistance() {
+        var distanceField = document.getElementById("DistanceField");
+        if (OptionList.value == 5)
+            distanceField.style.display = '';
+        else
+            distanceField.style.display = 'none';
+    }
+    function GetResult() {
+        if (Validate()) {
+            if (OptionList.value == 5)
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetFuelConsumption", "CarComparison")',
+                contentType: "application/json; charset=utf-8",
+                data: { 'selectedOption': OptionList.value, 'distance': $("#Distance").val()},
+                success: function (data) {
+                    document.getElementById("PopulateResult").innerHTML = "";
+                    document.getElementById("PopulateResult").innerHTML = data;
+                }
+            });
+            else
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetResults", "CarComparison")',
+                contentType: "application/json; charset=utf-8",
+                data: { 'selectedOption': OptionList.value },
+                success: function (data) {
+                    document.getElementById("PopulateResult").innerHTML = "";
+                    document.getElementById("PopulateResult").innerHTML = data;
+                }
+            });
+        }
+    }
+    function Validate() {
+        if (OptionList.value == 0 || OptionList.value == undefined || OptionList.value == '') {
+            alert("Please select an option");
+            return false;
+        }
+        if (OptionList.value == 5 && ($("#Distance").val() == undefined || $("#Distance").val() == '' || $("#Distance").val() < 0)) {
+            alert("Please provide a valid distance");
+            return false;
+        }
+        return true;
+    }
+</script>

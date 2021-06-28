@@ -1,0 +1,34 @@
+﻿@model List<CarComparisonProject.Models.CarModel>
+@section styles{
+    <link rel="Stylesheet" href="@Href("style/CarTable.css")" />
+}
+
+<div class="box-shadow" id="CarTableDiv">
+    <table id="CarTable">
+        <thead>
+            <tr>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Color</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>TCC Rating</th>
+                <th>Fuel Consumption</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var caritem in Model)
+            {
+                <tr>
+                    <th>@caritem.Make</th>
+                    <th>@caritem.Model</th>
+                    <th>@caritem.Color</th>
+                    <th>@caritem.Year</th>
+                    <th>@("$" + string.Format("{0:n2}",@caritem.Price))</th>
+                    <th>@caritem.Rating</th>
+                    <th>@caritem.HwyMpg</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

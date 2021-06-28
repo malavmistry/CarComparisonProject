@@ -1,0 +1,24 @@
+﻿@model IDictionary<int, decimal>
+@section styles{
+    <link rel="Stylesheet" href="@Href("style/CarTable.css")" />
+}
+
+<div class="box-shadow" id="CarTableDiv">
+    <table id="CarTable">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>AVG MPG/Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var caritem in Model)
+            {
+                <tr>
+                    <th>@caritem.Key</th>
+                    <th>@caritem.Value</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
